@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Configuration class for setting up Caffeine-based caching in the application.
+ * Defines beans for Caffeine cache configuration and the cache manager.
+ */
+
 @Configuration
 public class CacheConfig {
 
@@ -24,5 +29,4 @@ public class CacheConfig {
         cacheManager.setCaffeine(caffeine); // synchronous
         return cacheManager;
     }
-
 }

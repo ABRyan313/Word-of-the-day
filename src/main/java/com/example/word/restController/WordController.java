@@ -15,6 +15,12 @@ import reactor.core.publisher.Mono;
 import java.util.stream.Collectors;
 import java.util.List;
 
+/**
+ * REST controller for word-related resources.
+ * Provides endpoints to get the word of the day and its definition,
+ * as well as the history of previously published words.
+ */
+
 @Tag(name = "Word resource", description = "APIs for random word and its definition")
 @RestController
 @AllArgsConstructor

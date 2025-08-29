@@ -9,6 +9,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JPA entity representing a word and its definitions.
+ * Stores the word, a list of definitions, publication date, and creation timestamp.
+ */
+
+
 @Getter
 @Entity
 @Table(name = "word", uniqueConstraints = {

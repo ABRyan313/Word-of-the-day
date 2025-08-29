@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+/**
+ * Response DTO representing the word of the day and its definitions.
+ */
 
 @Data
 @NoArgsConstructor
