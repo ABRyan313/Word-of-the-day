@@ -4,6 +4,7 @@ import com.example.word.model.domain.DefinitionPos;
 import com.example.word.model.dto.DictionaryEntry;
 import com.example.word.model.dto.WordOfTheDayResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -47,5 +48,10 @@ public class WordService {
                 .flatMap(word -> getWordDefinitions(word)
                         .map(defs -> new WordOfTheDayResponse(word, defs))
                 );
+    }
+
+    @Cacheable("wordOfTheDay")
+    public WordOfTheDayResponse getDefinitionAndPosCached() {
+        return getDefinitionAndPos().block();
     }
 }

@@ -21,6 +21,6 @@ public class WordController {
     @Operation(summary = "Get word and its definition")
     @GetMapping
     public Mono<WordOfTheDayResponse> getDefinitionAndPos(){
-        return wordService.getDefinitionAndPos();
+        return Mono.just(wordService.getDefinitionAndPosCached());
     }
 }
