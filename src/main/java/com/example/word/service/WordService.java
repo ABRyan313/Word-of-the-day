@@ -3,19 +3,25 @@ package com.example.word.service;
 import com.example.word.model.domain.DefinitionPos;
 import com.example.word.model.dto.DictionaryEntry;
 import com.example.word.model.dto.WordOfTheDayResponse;
+import com.example.word.persistence.WordEntity;
+import com.example.word.persistence.WordRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
 public class WordService {
 
     private final WebClient webClient;
+    private final WordRepository wordRepository;
+    private static final long TTL_HOURS = 24;
 
     public Mono<String> getWord() {
         String randomWordApi = "https://random-word-api.herokuapp.com/word";
@@ -52,6 +58,45 @@ public class WordService {
 
     @Cacheable("wordOfTheDay")
     public WordOfTheDayResponse getDefinitionAndPosCached() {
-        return getDefinitionAndPos().block();
+        // Save in DB if not already saved for today
+        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
+        WordEntity existing = wordRepository.findFirstByPublishedAtAfterOrderByPublishedAtDesc(startOfDay);
+
+        if (existing != null) {
+            // Convert List<String> from DB to List<DefinitionPos>
+            List<DefinitionPos> defsFromDb = existing.getDefinitions().stream()
+                    .map(def -> new DefinitionPos(def, ""))
+                    .toList();
+
+            return new WordOfTheDayResponse(existing.getWord(), defsFromDb);
+        }
+
+        // Fetch new word from external API
+        String word = getWord().block();  // blocking to return WordOfTheDayResponse
+        List<DefinitionPos> definitions = getWordDefinitions(word).block();
+
+        // Save new word in DB
+        WordEntity entity = new WordEntity();
+        entity.setWord(word);
+        entity.setDefinitions(definitions.stream()
+                .map(DefinitionPos::getDefinition)
+                .toList()
+        );
+        entity.setPublishedAt(LocalDateTime.now());
+        wordRepository.save(entity);
+
+        return new WordOfTheDayResponse(word, definitions);
+    }
+
+    public List<WordOfTheDayResponse> getWordHistory() {
+        return wordRepository.findAllByOrderByPublishedAtDesc()
+                .stream()
+                .map(entity -> new WordOfTheDayResponse(
+                        entity.getWord(),
+                        entity.getDefinitions().stream()
+                                .map(def -> new DefinitionPos(def, ""))
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
     }
 }
