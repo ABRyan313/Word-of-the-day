@@ -63,9 +63,11 @@ The application will start on **[http://localhost:8080](http://localhost:8080)**
 
 ## API Endpoints
 
-| Method | Endpoint      | Description                      | Response Example |
-| ------ | ------------- | -------------------------------- | ---------------- |
-| GET    | `/word/daily` | Get random word with definitions | See below        |
+| Method | Endpoint                | Description                               | Response Example |
+| ------ | ----------------------- | ----------------------------------------- | ---------------- |
+| GET    | `/word`                 | Get random word with definitions (daily)  | See below        |
+| GET    | `/wordOfTheDay/history` | Get saved words history from the database |                  |
+
 
 ### Example Response
 
