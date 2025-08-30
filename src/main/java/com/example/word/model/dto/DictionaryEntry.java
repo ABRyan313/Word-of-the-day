@@ -1,6 +1,8 @@
 package com.example.word.model.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 /**
@@ -8,18 +10,21 @@ import java.util.List;
  * Includes nested classes for meaning and definition details.
  */
 
-@Data
+@Getter
+@Setter
 public class DictionaryEntry {
     private String word;
     private List<Meaning> meanings;
 
-    @Data
+    @Getter
+    @Setter
     public static class Meaning {
         private String partOfSpeech;
         private List<Definition> definitions;
     }
 
-    @Data
+    @Getter
+    @Setter
     public static class Definition {
         private String definition;
     }

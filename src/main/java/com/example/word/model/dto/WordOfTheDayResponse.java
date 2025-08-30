@@ -1,16 +1,15 @@
 package com.example.word.model.dto;
 
 import com.example.word.model.domain.DefinitionPos;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 /**
  * Response DTO representing the word of the day and its definitions.
  */
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class WordOfTheDayResponse {

@@ -21,7 +21,7 @@ import java.util.List;
  * as well as the history of previously published words.
  */
 
-@Tag(name = "Word resource", description = "APIs for random word and its definition")
+@Tag(name = "Word resource", description = "APIs for random word and its definitions and part of speech")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/wordOfTheDay")

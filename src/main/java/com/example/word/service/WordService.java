@@ -21,7 +21,6 @@ public class WordService {
 
     private final WebClient webClient;
     private final WordRepository wordRepository;
-    private static final long TTL_HOURS = 24;
 
     /**
      * Fetches a random word from the external Random Word API.
