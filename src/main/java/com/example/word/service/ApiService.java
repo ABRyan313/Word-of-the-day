@@ -7,7 +7,6 @@ import com.example.word.persistence.WordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,16 +19,6 @@ public class ApiService {
     private final WordApiService wordApiService;
     private final DictionaryApiService dictionaryApiService;
     private final WordRepository wordRepository;
-
-    /**
-     * Asynchronously fetches a random word and its definitions.
-     */
-    public Mono<WordOfTheDayResponse> getDefinitionAndPos() {
-        return wordApiService.getWord()
-                .flatMap(word -> dictionaryApiService.getDefinitions(word)
-                        .map(defs -> new WordOfTheDayResponse(word, defs))
-                );
-    }
 
     /**
      * Retrieves the cached Word of the Day and its definitions. If a word has already been published today,
@@ -77,8 +66,9 @@ public class ApiService {
      * @return a list of WordOfTheDayResponse objects ordered by publish date descending
      */
     public List<WordOfTheDayResponse> getWordHistory() {
-        return wordRepository.findAllByOrderByPublishedAtDesc()
-                .stream()
+        List<WordEntity> entities = wordRepository.findAllByOrderByPublishedAtDesc();
+
+        return entities.stream()
                 .map(entity -> new WordOfTheDayResponse(
                         entity.getWord(),
                         entity.getDefinitions().stream()
