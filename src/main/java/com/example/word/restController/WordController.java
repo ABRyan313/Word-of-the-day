@@ -4,7 +4,7 @@ import com.example.word.model.domain.DefinitionPos;
 import com.example.word.model.dto.WordOfTheDayResponse;
 import com.example.word.persistence.WordEntity;
 import com.example.word.persistence.WordRepository;
-import com.example.word.service.WordService;
+import com.example.word.service.ApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -27,13 +27,13 @@ import java.util.List;
 @RequestMapping("/wordOfTheDay")
 public class WordController {
 
-    private final WordService wordService;
+    private final ApiService apiService;
     private final WordRepository wordRepository;
 
     @Operation(summary = "Get word and its definition")
     @GetMapping
     public Mono<WordOfTheDayResponse> getDefinitionAndPos(){
-        return Mono.just(wordService.getDefinitionAndPosCached());
+        return Mono.just(apiService.getDefinitionAndPosCached());
     }
 
     @Operation(summary = "Get history of words")
